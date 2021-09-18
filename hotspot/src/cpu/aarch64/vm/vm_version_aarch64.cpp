@@ -255,7 +255,11 @@ void VM_Version::get_processor_features() {
     }
   }
 
-  if (UseGHASHIntrinsics) {
+  if (auxv & HWCAP_PMULL) {
+    if (FLAG_IS_DEFAULT(UseGHASHIntrinsics)) {
+      FLAG_SET_DEFAULT(UseGHASHIntrinsics, true);
+    }
+  } else if (UseGHASHIntrinsics) {
     warning("GHASH intrinsics are not available on this CPU");
     FLAG_SET_DEFAULT(UseGHASHIntrinsics, false);
   }

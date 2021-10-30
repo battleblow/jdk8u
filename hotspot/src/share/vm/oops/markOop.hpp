@@ -104,6 +104,9 @@ class JavaThread;
 class markOopDesc: public oopDesc {
  private:
   // Conversion
+#if defined(__clang_major__) && (__clang_major__ >= 13)
+  NOINLINE
+#endif
   uintptr_t value() const { return (uintptr_t) this; }
 
  public:

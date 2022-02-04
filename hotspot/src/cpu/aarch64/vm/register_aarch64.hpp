@@ -57,10 +57,16 @@ class RegisterImpl: public AbstractRegisterImpl {
   VMReg as_VMReg();
 
   // accessors
+#if defined(__clang_major__) && (__clang_major__ >= 13)
+  NOINLINE
+#endif
   int   encoding() const                         { assert(is_valid(), "invalid register"); return (intptr_t)this; }
   bool  is_valid() const                         { return 0 <= (intptr_t)this && (intptr_t)this < number_of_registers; }
   bool  has_byte_register() const                { return 0 <= (intptr_t)this && (intptr_t)this < number_of_byte_registers; }
   const char* name() const;
+#if defined(__clang_major__) && (__clang_major__ >= 13)
+  NOINLINE
+#endif
   int   encoding_nocheck() const                 { return (intptr_t)this; }
 
   // Return the bit which represents this register.  This is intended
@@ -136,7 +142,13 @@ class FloatRegisterImpl: public AbstractRegisterImpl {
   FloatRegister successor() const                          { return as_FloatRegister(encoding() + 1); }
 
   // accessors
+#if defined(__clang_major__) && (__clang_major__ >= 13)
+  NOINLINE
+#endif
   int   encoding() const                          { assert(is_valid(), "invalid register"); return (intptr_t)this; }
+#if defined(__clang_major__) && (__clang_major__ >= 13)
+  NOINLINE
+#endif
   int   encoding_nocheck() const                         { return (intptr_t)this; }
   bool  is_valid() const                          { return 0 <= (intptr_t)this && (intptr_t)this < number_of_registers; }
   const char* name() const;

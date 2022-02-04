@@ -356,6 +356,12 @@ ifeq ($(USE_CLANG), true)
       OPT_CFLAGS/bitMap.o += -O1
     endif
   endif
+  ifeq ($(shell expr $(CC_VER_MAJOR) = 13), 1)
+    ifeq ($(BUILDARCH), aarch64)
+      PCH_FLAG/immediate_aarch64.o = $(PCH_FLAG/NO_PCH)
+      OPT_CFLAGS/immediate_aarch64.o = -O1
+    endif
+  endif
 else
   # 6835796. Problem in GCC 4.3.0 with mulnode.o optimized compilation.
   ifeq ($(shell expr $(CC_VER_MAJOR) = 4 \& $(CC_VER_MINOR) = 3), 1)

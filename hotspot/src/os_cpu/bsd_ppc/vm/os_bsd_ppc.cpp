@@ -177,6 +177,10 @@ JVM_handle_bsd_signal(int sig, siginfo_t* info, void* ucVoid, int abort_if_unrec
 
   Thread* t = ThreadLocalStorage::get_thread_slow();   // slow & steady
 
+  // Must do this before SignalHandlerMark, if crash protection installed we will longjmp away
+  // (no destructors can be run)
+  os::ThreadCrashProtection::check_crash_protection(sig, t);
+
   SignalHandlerMark shm(t);
 
   // Note: it's not uncommon that JNI code uses signal/sigset to install

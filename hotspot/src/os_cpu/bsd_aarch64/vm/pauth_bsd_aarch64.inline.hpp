@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Arm Limited. All rights reserved.
+ * Copyright (c) 2021, 2022, Arm Limited. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -22,18 +22,15 @@
  *
  */
 
-#ifndef CPU_AARCH64_PAUTH_AARCH64_INLINE_HPP
-#define CPU_AARCH64_PAUTH_AARCH64_INLINE_HPP
+#ifndef OS_CPU_BSD_AARCH64_PAUTH_BSD_AARCH64_INLINE_HPP
+#define OS_CPU_BSD_AARCH64_PAUTH_BSD_AARCH64_INLINE_HPP
 
-#if defined(LINUX)
-#include "pauth_linux_aarch64.inline.hpp"
-#elif defined(_ALLBSD_SOURCE)
-#include "pauth_bsd_aarch64.inline.hpp"
-#endif
+// OS specific Support for ROP Protection in VM code.
+// For more details on PAC see pauth_aarch64.hpp.
 
-inline bool pauth_ptr_is_raw(address ptr) {
-  // Confirm none of the high bits are set in the pointer.
-  return ptr == pauth_strip_pointer(ptr);
+inline address pauth_strip_pointer(address ptr) {
+  // No PAC support in BSD as of yet.
+  return ptr;
 }
 
-#endif // CPU_AARCH64_PAUTH_AARCH64_INLINE_HPP
+#endif // OS_CPU_BSD_AARCH64_PAUTH_BSD_AARCH64_INLINE_HPP

@@ -223,10 +223,9 @@ JVM_handle_bsd_signal(int sig, siginfo_t* info, void* ucVoid, int abort_if_unrec
   // retrieve crash address
   address addr = info ? (address) info->si_addr : NULL;
 
-  // SafeFetch 32 handling:
-  // - make it work if _thread is null
-  // - make it use the standard os::...::ucontext_get/set_pc APIs
-  if (uc) {
+  // Moved SafeFetch32 handling outside thread!=NULL conditional block to make
+  // it work if no associated JavaThread object exists.
+  if ((sig == SIGSEGV || sig == SIGBUS) && uc) {
     address const pc = os::Bsd::ucontext_get_pc(uc);
     if (pc && StubRoutines::is_safefetch_fault(pc)) {
       uc->uc_mcontext.mc_srr0 = (unsigned long)StubRoutines::continuation_for_safefetch_fault(pc);

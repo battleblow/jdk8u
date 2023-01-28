@@ -2438,7 +2438,7 @@ static char* anon_mmap(char* requested_addr, size_t bytes, size_t alignment_hint
   if (fixed) {
     assert((uintptr_t)requested_addr % os::Bsd::page_size() == 0, "unaligned address");
     flags |= MAP_FIXED;
-#ifndef __OpenBSD__
+#if !defined(__OpenBSD__) && !defined(__APPLE__)
   } else if (alignment_hint > 0) {
     flags |= MAP_ALIGNED(ffs(alignment_hint) - 1);
 #endif
@@ -3866,6 +3866,7 @@ void os::init(void) {
   if ((status = pthread_condattr_init(_condattr)) != 0) {
     fatal(err_msg("pthread_condattr_init: %s", strerror(status)));
   }
+#ifndef __APPLE__
   // Only set the clock if CLOCK_MONOTONIC is available
   if (Bsd::supports_monotonic_clock()) {
     if ((status = pthread_condattr_setclock(_condattr, CLOCK_MONOTONIC)) != 0) {
@@ -3877,6 +3878,7 @@ void os::init(void) {
       }
     }
   }
+#endif
   // else it defaults to CLOCK_REALTIME
 
 #ifdef __APPLE__

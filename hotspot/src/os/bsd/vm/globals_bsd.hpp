@@ -35,7 +35,13 @@
   product(bool, UseBsdPosixThreadCPUClocks, true,                     \
           "enable fast Bsd Posix clocks where available")             \
 /*  NB: The default value of UseBsdPosixThreadCPUClocks may be        \
-    overridden in Arguments::parse_each_vm_init_arg.  */
+    overridden in Arguments::parse_each_vm_init_arg.  */                \
+                                                                        \
+  product(bool, UseHugeTLBFS, false,                                    \
+          "Use MAP_HUGETLB for large pages")                            \
+                                                                        \
+  product(bool, UseSHM, false,                                          \
+          "Use SYSV shared memory for large pages")
 
 //
 // Defines Bsd-specific default values. The flags are available on all

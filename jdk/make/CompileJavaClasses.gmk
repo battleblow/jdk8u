@@ -274,7 +274,7 @@ ifndef OPENJDK
 endif
 
 BSD_SRC_DIRS :=
-ifneq (, $(filter $(OPENJDK_TARGET_OS), bsd macosx))
+ifeq ($(OPENJDK_TARGET_OS), bsd)
   BSD_SRC_DIRS += $(JDK_TOPDIR)/src/bsd/classes
 
   # these files are duplicated in BSD_SRC_DIRS
@@ -288,8 +288,10 @@ ifeq ($(OPENJDK_TARGET_OS), macosx)
   # these files are duplicated in BSD_SRC_DIRS
   EXFILES += $(JDK_TOPDIR)/src/solaris/classes/sun/java2d/BackBufferCapsProvider.java \
       $(JDK_TOPDIR)/src/solaris/classes/java/lang/ClassLoaderHelper.java \
+      $(JDK_TOPDIR)/src/solaris/classes/java/net/DefaultInterface.java \
       $(JDK_TOPDIR)/src/solaris/classes/sun/util/locale/provider/HostLocaleProviderAdapterImpl.java \
       $(JDK_TOPDIR)/src/solaris/classes/sun/nio/fs/GnomeFileTypeDetector.java \
+      $(JDK_TOPDIR)/src/solaris/classes/sun/nio/ch/DefaultSelectorProvider.java \
       $(JDK_TOPDIR)/src/solaris/classes/sun/nio/ch/sctp/SctpChannelImpl.java \
       $(JDK_TOPDIR)/src/solaris/classes/sun/nio/ch/sctp/SctpMultiChannelImpl.java \
       $(JDK_TOPDIR)/src/solaris/classes/sun/nio/ch/sctp/SctpServerChannelImpl.java

@@ -288,6 +288,18 @@ static int closefd(int fd1, int fd2) {
 
     {
         /*
+         * And close/dup the file descriptor
+         * (restart if interrupted by signal)
+         */
+        if (fd1 < 0) {
+            rv = close(fd2);
+        } else {
+            do {
+                rv = dup2(fd1, fd2);
+            } while (rv == -1 && errno == EINTR);
+        }
+
+        /*
          * Send a wakeup signal to all threads blocked on this
          * file descriptor.
          */
@@ -297,19 +309,6 @@ static int closefd(int fd1, int fd2) {
             pthread_kill( curr->thr, sigWakeup );
             curr = curr->next;
         }
-
-        /*
-         * And close/dup the file descriptor
-         * (restart if interrupted by signal)
-         */
-        do {
-            if (fd1 < 0) {
-                rv = close(fd2);
-            } else {
-                rv = dup2(fd1, fd2);
-            }
-        } while (rv == -1 && errno == EINTR);
-
     }
 
     /*

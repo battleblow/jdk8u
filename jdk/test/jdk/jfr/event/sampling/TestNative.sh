@@ -3,10 +3,13 @@
 set -ex
 
 OS=`uname -s`
-if [  "${OS}" != "Linux" -a "${OS}" != "Darwin" ]; then
-    echo "This is a Linux/MacOSX only test"
-    exit 0;
-fi
+case OS in
+    Linux | Darwin | *BSD)
+        ;;
+    *)
+        echo "This is a Linux/MacOSX only test"
+        exit 0
+esac
 
 if [ "x$TESTGCC" = "x" ]; then
   TESTGCC=$(readlink -f $(which gcc))

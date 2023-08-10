@@ -41212,7 +41212,7 @@ fi
 
 
 
-  # On OpenBSD check to see if ld requires -z wxneeded
+  # On OpenBSD check to see if ld requires -z wxneeded or -z nobtcfi
   if test "`uname -s`" = "OpenBSD"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if ld requires -z wxneeded" >&5
 $as_echo_n "checking if ld requires -z wxneeded... " >&6; }
@@ -41224,10 +41224,39 @@ int main() { }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
-          if $READELF -l conftest$ac_exeext | $GREP OPENBSD_WXNEED > /dev/null; then
+          if $READELF -l conftest$ac_exeext | $GREP WXNEED > /dev/null; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
             LDFLAGS_JDK="${LDFLAGS_JDK} -Wl,-z,wxneeded"
+          else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+          fi
+
+else
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+    LDFLAGS="$PUSHED_LDFLAGS"
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if ld requires -z nobtcfi" >&5
+$as_echo_n "checking if ld requires -z nobtcfi... " >&6; }
+    PUSHED_LDFLAGS="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -Wl,-z,nobtcfi"
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int main() { }
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+          if $READELF -l conftest$ac_exeext | $GREP NOBTCF > /dev/null; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+            LDFLAGS_JDK="${LDFLAGS_JDK} -Wl,-z,nobtcfi"
           else
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -43777,7 +43806,7 @@ $as_echo "$NATIVE_DEBUG_SYMBOLS" >&6; }
 
   if test "x$NATIVE_DEBUG_SYMBOLS" = xzipped; then
 
-    if test "x$OPENJDK_TARGET_OS" = xsolaris || test "x$OPENJDK_TARGET_OS" = xlinux; then
+    if test "x$OPENJDK_TARGET_OS" = xsolaris || test "x$OPENJDK_TARGET_OS" = xlinux || test "x$OPENJDK_TARGET_OS" = xbsd; then
       if test "x$OBJCOPY" = x; then
         # enabling of enable-debug-symbols and can't find objcopy
         # this is an error
@@ -43800,7 +43829,7 @@ $as_echo "$NATIVE_DEBUG_SYMBOLS" >&6; }
     DEBUG_BINARIES=true
   elif test "x$NATIVE_DEBUG_SYMBOLS" = xexternal; then
 
-    if test "x$OPENJDK_TARGET_OS" = xsolaris || test "x$OPENJDK_TARGET_OS" = xlinux; then
+    if test "x$OPENJDK_TARGET_OS" = xsolaris || test "x$OPENJDK_TARGET_OS" = xlinux || test "x$OPENJDK_TARGET_OS" = xbsd; then
       if test "x$OBJCOPY" = x; then
         # enabling of enable-debug-symbols and can't find objcopy
         # this is an error

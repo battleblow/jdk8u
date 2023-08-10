@@ -4591,6 +4591,12 @@ void os::pause() {
   }
 }
 
+#ifdef __OpenBSD__
+bool os::is_primordial_thread() {
+  return (pthread_main_np() == 1);
+}
+#endif
+
 
 // Refer to the comments in os_solaris.cpp park-unpark.
 //

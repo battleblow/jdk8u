@@ -851,16 +851,37 @@ AC_DEFUN_ONCE([TOOLCHAIN_MISC_CHECKS],
 
   AC_SUBST(PACKAGE_PATH)
 
-  # On OpenBSD check to see if ld requires -z wxneeded
+  # On OpenBSD check to see if ld requires -z wxneeded or -z nobtcfi
   if test "`uname -s`" = "OpenBSD"; then
     AC_MSG_CHECKING([if ld requires -z wxneeded])
     PUSHED_LDFLAGS="$LDFLAGS"
     LDFLAGS="$LDFLAGS -Wl,-z,wxneeded"
     AC_LINK_IFELSE([AC_LANG_SOURCE([[int main() { }]])],
         [
-          if $READELF -l conftest$ac_exeext | $GREP OPENBSD_WXNEED > /dev/null; then
+          if $READELF -l conftest$ac_exeext | $GREP WXNEED > /dev/null; then
             AC_MSG_RESULT([yes])
             LDFLAGS_JDK="${LDFLAGS_JDK} -Wl,-z,wxneeded"
+          else
+            AC_MSG_RESULT([yes])
+          fi
+        ],
+        [
+          AC_MSG_RESULT([no])
+        ],
+        [
+          AC_MSG_RESULT([no])
+        ]
+    )
+    LDFLAGS="$PUSHED_LDFLAGS"
+
+    AC_MSG_CHECKING([if ld requires -z nobtcfi])
+    PUSHED_LDFLAGS="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -Wl,-z,nobtcfi"
+    AC_LINK_IFELSE([AC_LANG_SOURCE([[int main() { }]])],
+        [
+          if $READELF -l conftest$ac_exeext | $GREP NOBTCF > /dev/null; then
+            AC_MSG_RESULT([yes])
+            LDFLAGS_JDK="${LDFLAGS_JDK} -Wl,-z,nobtcfi"
           else
             AC_MSG_RESULT([yes])
           fi

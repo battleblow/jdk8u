@@ -1821,7 +1821,11 @@ inline bool JavaThread::stack_yellow_zone_disabled() {
 inline bool JavaThread::stack_yellow_zone_enabled() {
 #ifdef ASSERT
   if (os::uses_stack_guard_pages() &&
+#ifdef __OpenBSD__
+      !os::is_primordial_thread()) {
+#else
       !(DisablePrimordialThreadGuardPages && os::is_primordial_thread())) {
+#endif
     assert(_stack_guard_state != stack_guard_unused, "guard pages must be in use");
   }
 #endif

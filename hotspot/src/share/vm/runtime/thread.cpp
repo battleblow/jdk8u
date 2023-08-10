@@ -2494,7 +2494,11 @@ void JavaThread::java_resume() {
 void JavaThread::create_stack_guard_pages() {
   if (!os::uses_stack_guard_pages() ||
       _stack_guard_state != stack_guard_unused ||
+#ifdef __OpenBSD__
+      os::is_primordial_thread()) {
+#else
       (DisablePrimordialThreadGuardPages && os::is_primordial_thread())) {
+#endif
       if (TraceThreadEvents) {
         tty->print_cr("Stack guard page creation for thread "
                       UINTX_FORMAT " disabled", os::current_thread_id());

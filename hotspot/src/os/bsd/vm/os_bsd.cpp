@@ -1285,7 +1285,7 @@ pid_t os::Bsd::gettid() {
   return (pid_t)tid;
 #endif
 #elif defined(__OpenBSD__)
-  retval = syscall(SYS_getthrid);
+  return ::getthrid();
 #elif defined(__NetBSD__)
   retval = (pid_t) _lwp_self();
 #endif

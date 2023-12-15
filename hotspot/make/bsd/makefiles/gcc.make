@@ -287,6 +287,9 @@ ifeq ($(USE_CLANG), true)
     WARNINGS_ARE_ERRORS += -Wno-undefined-bool-conversion -Wno-expansion-to-defined
     WARNINGS_ARE_ERRORS += -Wno-undefined-var-template
   endif
+  ifneq "$(shell expr \( $(CC_VER_MAJOR) \>= 16 \))" "0"
+    WARNINGS_ARE_ERRORS += -Wno-unnamed-type-template-args
+  endif
 else
   WARNINGS_ARE_ERRORS += -Wno-format
 endif

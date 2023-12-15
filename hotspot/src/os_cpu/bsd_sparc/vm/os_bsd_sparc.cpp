@@ -741,7 +741,7 @@ bool os::is_allocatable(size_t bytes) {
 
 size_t os::Bsd::min_stack_allowed  = 128 * K;
 
-bool os::Bsd::supports_variable_stack_size() {  return false; }
+bool os::Bsd::supports_variable_stack_size() {  return true; }
 
 // return default stack size for thr_type
 size_t os::Bsd::default_stack_size(os::ThreadType thr_type) {

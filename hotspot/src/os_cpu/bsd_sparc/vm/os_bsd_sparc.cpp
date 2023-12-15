@@ -711,6 +711,7 @@ JVM_handle_bsd_signal(int sig,
   err.report_and_die();
 
   ShouldNotReachHere();
+  return false; // unreachable
 }
 
 void os::Bsd::init_thread_fpu_state(void) {

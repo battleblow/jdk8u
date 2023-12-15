@@ -478,7 +478,7 @@ void NativeMovConstRegPatching::set_data(int x) {
         oop_Relocation *r = iter.oop_reloc();
         if (oop_addr == NULL) {
           oop_addr = r->oop_addr();
-          *oop_addr = cast_to_oop(x);
+          *oop_addr = cast_to_oop((intptr_t)x);
         } else {
           assert(oop_addr == r->oop_addr(), "must be only one set-oop here");
         }
@@ -487,7 +487,7 @@ void NativeMovConstRegPatching::set_data(int x) {
         metadata_Relocation *r = iter.metadata_reloc();
         if (metadata_addr == NULL) {
           metadata_addr = r->metadata_addr();
-          *metadata_addr = (Metadata*)x;
+          *metadata_addr = (Metadata*)(intptr_t)x;
         } else {
           assert(metadata_addr == r->metadata_addr(), "must be only one set-metadata here");
         }

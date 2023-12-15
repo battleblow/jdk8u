@@ -312,6 +312,13 @@ ifeq ($(OS_VENDOR), Darwin)
   CFLAGS_WARN/os_bsd.o = $(CFLAGS_WARN/DEFAULT) -Wno-deprecated-declarations
 endif
 
+ifeq ($(USE_CLANG),)
+  # GCC 8+ 
+  ifeq "$(shell expr \( $(CC_VER_MAJOR) \>= 8 \))" "1"
+    CFLAGS_WARN/allocation.o = $(CFLAGS_WARN/DEFAULT) -Wno-system-headers
+  endif
+endif
+
 OPT_CFLAGS/SIZE=-Os
 OPT_CFLAGS/SPEED=-O3
 

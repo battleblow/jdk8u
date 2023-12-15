@@ -527,7 +527,7 @@ void LIR_Assembler::jobject2reg_with_patching(Register reg, CodeEmitInfo *info) 
   int oop_index = __ oop_recorder()->allocate_oop_index(NULL);
   PatchingStub* patch = new PatchingStub(_masm, patching_id(info), oop_index);
 
-  AddressLiteral addrlit(NULL, oop_Relocation::spec(oop_index));
+  AddressLiteral addrlit((intptr_t)NULL, oop_Relocation::spec(oop_index));
   assert(addrlit.rspec().type() == relocInfo::oop_type, "must be an oop reloc");
   // It may not seem necessary to use a sethi/add pair to load a NULL into dest, but the
   // NULL will be dynamically patched later and the patched value may be large.  We must
@@ -546,7 +546,7 @@ void LIR_Assembler::klass2reg_with_patching(Register reg, CodeEmitInfo *info) {
   // Allocate a new index in table to hold the klass once it's been patched
   int index = __ oop_recorder()->allocate_metadata_index(NULL);
   PatchingStub* patch = new PatchingStub(_masm, PatchingStub::load_klass_id, index);
-  AddressLiteral addrlit(NULL, metadata_Relocation::spec(index));
+  AddressLiteral addrlit((intptr_t)NULL, metadata_Relocation::spec(index));
   assert(addrlit.rspec().type() == relocInfo::metadata_type, "must be an metadata reloc");
   // It may not seem necessary to use a sethi/add pair to load a NULL into dest, but the
   // NULL will be dynamically patched later and the patched value may be large.  We must

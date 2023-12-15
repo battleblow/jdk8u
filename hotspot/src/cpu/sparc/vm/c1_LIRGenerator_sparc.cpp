@@ -853,7 +853,7 @@ void LIRGenerator::do_Convert(Convert* x) {
 
       value.load_item();
       LIR_Opr reg = rlock_result(x);
-      __ convert(x->op(), value.result(), reg, false);
+      __ convert(x->op(), value.result(), reg);
     }
     break;
 
@@ -863,7 +863,7 @@ void LIRGenerator::do_Convert(Convert* x) {
       value.load_item();
       LIR_Opr reg = rlock_result(x);
       set_vreg_flag(reg, must_start_in_memory);
-      __ convert(x->op(), value.result(), reg, false);
+      __ convert(x->op(), value.result(), reg);
     }
     break;
 

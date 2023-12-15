@@ -566,6 +566,7 @@ AC_DEFUN_ONCE([JDKOPT_SETUP_JDK_VERSION_NUMBERS],
     # Otherwise we will use the value from "version-numbers" included above.
     COMPANY_NAME="$with_vendor_name"
   fi
+  AC_SUBST(COMPANY_NAME)
 
   # The vendor URL, if any
   AC_ARG_WITH(vendor-url, [AS_HELP_STRING([--with-vendor-url],

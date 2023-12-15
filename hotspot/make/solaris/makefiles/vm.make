@@ -83,7 +83,8 @@ CXXFLAGS =           \
   ${BUILD_TARGET}    \
   ${BUILD_USER}      \
   ${HS_LIB_ARCH}     \
-  ${VM_DISTRO}
+  ${VM_DISTRO}       \
+  ${CXXSTD_CXXFLAG}
 
 # This is VERY important! The version define must only be supplied to vm_version.o
 # If not, ccache will not re-use the cache at all, since the version string might contain

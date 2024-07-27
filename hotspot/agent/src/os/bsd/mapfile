@@ -41,7 +41,6 @@ SUNWprivate_1.1 {
 		Java_sun_jvm_hotspot_debugger_bsd_BsdDebuggerLocal_getThreadIntegerRegisterSet0;
 	
 		# proc_service.h functions - to be used by libthread_db
-		ps_getpid;
 		ps_pglobal_lookup;
 		ps_pread;
 		ps_pwrite;
@@ -49,9 +48,6 @@ SUNWprivate_1.1 {
 		ps_lsetregs;
 		ps_lgetfpregs;
 		ps_lgetregs;
-		ps_lcontinue;
-		ps_lgetxmmregs;
-		ps_lsetxmmregs;
 		ps_lstop;
 		ps_linfo;
 

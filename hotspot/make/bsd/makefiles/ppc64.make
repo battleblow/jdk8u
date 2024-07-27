@@ -37,11 +37,7 @@ ifeq ($(filter $(OPENJDK_TARGET_CPU_ENDIAN),big little),)
 endif
 
 ifeq ($(OPENJDK_TARGET_CPU_ENDIAN),big)
-  # fixes `relocation truncated to fit' error for gcc 4.1.
-  CFLAGS += -mminimal-toc
-
-  # finds use ppc64 instructions, but schedule for power5
-  CFLAGS += -mcpu=powerpc64 -mtune=power5 -minsert-sched-nops=regroup_exact -mno-multiple -mno-string
+  CFLAGS += -mcpu=powerpc64 -mtune=power5 -DABI_ELFv2
 else
   # Little endian machine uses ELFv2 ABI.
   CFLAGS += -DVM_LITTLE_ENDIAN -DABI_ELFv2

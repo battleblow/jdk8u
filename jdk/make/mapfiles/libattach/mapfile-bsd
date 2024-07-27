@@ -31,7 +31,6 @@ SUNWprivate_1.1 {
 	    Java_sun_tools_attach_BsdVirtualMachine_close;
 	    Java_sun_tools_attach_BsdVirtualMachine_connect;
 	    Java_sun_tools_attach_BsdVirtualMachine_getTempDir;
-	    Java_sun_tools_attach_BsdVirtualMachine_open;
 	    Java_sun_tools_attach_BsdVirtualMachine_sendQuitTo;
 	    Java_sun_tools_attach_BsdVirtualMachine_socket;
 	    Java_sun_tools_attach_BsdVirtualMachine_read;

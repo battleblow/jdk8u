@@ -381,8 +381,9 @@ int NET_ReadV(int s, const struct iovec * vector, int count) {
 
 int NET_RecvFrom(int s, void *buf, int len, unsigned int flags,
        struct sockaddr *from, int *fromlen) {
-    /* casting int *fromlen -> socklen_t* Both are ints */
-    BLOCKING_IO_RETURN_INT( s, recvfrom(s, buf, len, flags, from, (socklen_t *)fromlen), JNI_TRUE );
+    socklen_t socklen = *fromlen;
+    BLOCKING_IO_RETURN_INT( s, recvfrom(s, buf, len, flags, from, &socklen), JNI_TRUE );
+    *fromlen = socklen;
 }
 
 int NET_Send(int s, void *msg, int len, unsigned int flags) {
@@ -399,8 +400,9 @@ int NET_SendTo(int s, const void *msg, int len,  unsigned  int
 }
 
 int NET_Accept(int s, struct sockaddr *addr, int *addrlen) {
-    /* See NET_RecvFrom() */
+    socklen_t socklen = *addrlen;
     BLOCKING_IO_RETURN_INT( s, accept(s, addr, (socklen_t *)addrlen), JNI_TRUE );
+    *addrlen = socklen;
 }
 
 int NET_Connect(int s, struct sockaddr *addr, int addrlen) {

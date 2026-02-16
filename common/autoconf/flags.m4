@@ -158,12 +158,8 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_LIBS],
   #
 
   if test "x$TOOLCHAIN_TYPE" = xgcc -o "x$TOOLCHAIN_TYPE" = xclang; then
-    if test "x$TOOLCHAIN_TYPE" = xgcc; then
-      PICFLAG="-fPIC"
-      PIEFLAG="-fPIE"
-    else
-      PICFLAG=''
-    fi
+    PICFLAG="-fPIC"
+    PIEFLAG="-fPIE"
     C_FLAG_REORDER=''
     CXX_FLAG_REORDER=''
 

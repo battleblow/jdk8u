@@ -74,7 +74,6 @@ security.provider.6=sun.security.jgss.SunProvider
 security.provider.7=com.sun.security.sasl.Provider
 security.provider.8=org.jcp.xml.dsig.internal.dom.XMLDSigRI
 security.provider.9=sun.security.smartcardio.SunPCSC
-security.provider.10=apple.security.AppleProvider
 
 #
 # Sun Provider SecureRandom seed source.
@@ -225,7 +224,6 @@ package.access=sun.,\
                jdk.nashorn.tools.,\
                jdk.xml.internal.,\
                com.sun.activation.registries.,\
-               apple.,\
                jdk.jfr.events.,\
                jdk.jfr.internal.,\
                jdk.management.jfr.internal.
@@ -279,7 +277,6 @@ package.definition=sun.,\
                    jdk.nashorn.tools.,\
                    jdk.xml.internal.,\
                    com.sun.activation.registries.,\
-                   apple.,\
                    jdk.jfr.events.,\
                    jdk.jfr.internal.,\
                    jdk.management.jfr.internal.
@@ -1011,6 +1008,8 @@ jdk.xml.dsig.secureValidationPolicy=\
 # If the pattern is equal to the class name, it matches.
 # Otherwise, the status is UNDECIDED.
 #
+# Primitive types are not configurable with this filter.
+#
 #jdk.serialFilter=pattern;pattern
 
 #
@@ -1022,9 +1021,12 @@ jdk.xml.dsig.secureValidationPolicy=\
 # to increase limits.
 # If the limits (maxdepth, maxrefs, or maxbytes) are exceeded, the object is rejected.
 #
-# Each non-array type is allowed or rejected if it matches one of the patterns,
-# evaluated from left to right, and is otherwise allowed. Arrays of any
-# component type, including subarrays and arrays of primitives, are allowed.
+# The maxdepth of any array passed to the RMI Registry is set to
+# 10000.  The maximum depth of the graph is set to 20.
+# These limits can be reduced via the maxarray, maxdepth limits.
+#
+#sun.rmi.registry.registryFilter=pattern;pattern
+
 #
 # Array construction of any component type, including subarrays and arrays of
 # primitives, are allowed unless the length is greater than the maxarray limit.
@@ -1222,6 +1224,9 @@ jdk.sasl.disabledMechanisms=
 #   CAMERFIRMA_TLS : Distrust TLS Server certificates anchored by
 #   a Camerfirma root CA and issued after April 15, 2025.
 #
+#   CHUNGHWA_TLS : Distrust TLS Server certificates anchored by
+#   a Chunghwa root CA and issued after March 17, 2026.
+#
 # Leading and trailing whitespace surrounding each value are ignored.
 # Unknown values are ignored. If the property is commented out or set to the
 # empty String, no policies are enforced.
@@ -1233,7 +1238,8 @@ jdk.sasl.disabledMechanisms=
 # jdk.certpath.disabledAlgorithms; those restrictions are still enforced even
 # if this property is not enabled.
 #
-jdk.security.caDistrustPolicies=SYMANTEC_TLS,ENTRUST_TLS,CAMERFIRMA_TLS
+jdk.security.caDistrustPolicies=SYMANTEC_TLS,ENTRUST_TLS,CAMERFIRMA_TLS,\
+    CHUNGHWA_TLS
 
 #
 # Policies for the proxy_impersonator Kerberos ccache configuration entry

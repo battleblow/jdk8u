@@ -1802,10 +1802,10 @@ int os::get_loaded_modules_info(os::LoadedModulesCallbackFunc callback, void *pa
       return 1;
     }
   }
-  return 0;
 #else
   return 1;
 #endif
+  return 0;
 }
 
 void os::print_os_info_brief(outputStream* st) {

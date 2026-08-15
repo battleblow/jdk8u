@@ -41472,19 +41472,6 @@ rm -f core conftest.err conftest.$ac_objext \
     # This is later checked when setting flags.
   fi
 
-  if test "x$TOOLCHAIN_TYPE" = xgcc; then
-    if test "x$OPENJDK_TARGET_CPU_ARCH" = "xaarch64" ; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for broken aarch64 gcc 4.x" >&5
-$as_echo_n "checking for broken aarch64 gcc 4.x... " >&6; }
-      COMPILER_VERSION_NUMBER_MAJOR=`$ECHO "$COMPILER_VERSION_NUMBER" | $SED  "s/[^0-9].*//"`
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: found $COMPILER_VERSION_NUMBER_MAJOR.x" >&5
-$as_echo "found $COMPILER_VERSION_NUMBER_MAJOR.x" >&6; }
-      if test $COMPILER_VERSION_NUMBER_MAJOR -lt 5; then
-        as_fn_error $? "GCC < 5 may incorrectly compile HotSpot on aarch64. See JDK-8360869." "$LINENO" 5
-      fi
-    fi
-  fi
-
   # Check for broken SuSE 'ld' for which 'Only anonymous version tag is allowed
   # in executable.'
   USING_BROKEN_SUSE_LD=no
@@ -42665,8 +42652,6 @@ $as_echo "$ac_cv_c_bigendian" >&6; }
   # Generate make dependency files
   if test "x$TOOLCHAIN_TYPE" = xgcc || test "x$TOOLCHAIN_TYPE" = xclang; then
     C_FLAG_DEPS="-MMD -MF"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    C_FLAG_DEPS="-MMD -MF"
   elif test "x$TOOLCHAIN_TYPE" = xsolstudio; then
     C_FLAG_DEPS="-xMMD -xMF"
   elif test "x$TOOLCHAIN_TYPE" = xxlc; then
@@ -42691,9 +42676,6 @@ $as_echo "$ac_cv_c_bigendian" >&6; }
       CXXFLAGS_DEBUG_SYMBOLS="-g"
     fi
     ASFLAGS_DEBUG_SYMBOLS="-g"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    CFLAGS_DEBUG_SYMBOLS="-g"
-    CXXFLAGS_DEBUG_SYMBOLS="-g"
   elif test "x$TOOLCHAIN_TYPE" = xsolstudio; then
     CFLAGS_DEBUG_SYMBOLS="-g -xs"
     CXXFLAGS_DEBUG_SYMBOLS="-g0 -xs"
@@ -42840,56 +42822,6 @@ $as_echo "$supports" >&6; }
     CXXFLAGS_JDK="${CXXFLAGS_JDK} ${CXXSTD_CXXFLAG}"
     JVM_CFLAGS="${JVM_CFLAGS} ${CXXSTD_CXXFLAG}"
 
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    LEGACY_EXTRA_CFLAGS="$LEGACY_EXTRA_CFLAGS -fstack-protector"
-    LEGACY_EXTRA_CXXFLAGS="$LEGACY_EXTRA_CXXFLAGS -fstack-protector"
-    if test "x$OPENJDK_TARGET_OS" != xmacosx; then
-      LDFLAGS_JDK="$LDFLAGS_JDK -Wl,-z,relro"
-      LEGACY_EXTRA_LDFLAGS="$LEGACY_EXTRA_LDFLAGS -Wl,-z,relro"
-    fi
-    CXXSTD_CXXFLAG="-std=gnu++98"
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"" >&5
-$as_echo_n "checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"... " >&6; }
-  supports=yes
-
-  saved_cxxflags="$CXXFLAGS"
-  CXXFLAGS="$CXXFLAG $CXXSTD_CXXFLAG -Werror"
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-int i;
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-else
-  supports=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-  CXXFLAGS="$saved_cxxflags"
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $supports" >&5
-$as_echo "$supports" >&6; }
-  if test "x$supports" = "xyes" ; then
-    :
-  else
-    CXXSTD_CXXFLAG=""
-  fi
-
-    CXXFLAGS_JDK="${CXXFLAGS_JDK} ${CXXSTD_CXXFLAG}"
-    JVM_CFLAGS="${JVM_CFLAGS} ${CXXSTD_CXXFLAG}"
-
   fi
 
   if test "x$CFLAGS" != "x${ADDED_CFLAGS}"; then
@@ -42990,8 +42922,6 @@ fi
         CFLAGS_JDK="${CFLAGS_JDK} -fno-strict-aliasing"
         ;;
     esac
-
-    if test "x$TOOLCHAIN_TYPE" = xgcc; then
 
   REFERENCE_VERSION=6
 
@@ -43209,8 +43139,6 @@ $as_echo "$supports" >&6; }
   else
     :
   fi
-
-    fi
 
     # Check that the compiler supports -Wformat-overflow flag
     # Set USE_FORMAT_OVERFLOW to 1 if it does.
@@ -43572,7 +43500,7 @@ $as_echo "$supports" >&6; }
     # FIXME: PPC64 should not be here.
     CCXXFLAGS_JDK="$CCXXFLAGS_JDK -DPPC64"
   elif test "x$OPENJDK_TARGET_OS" = xbsd; then
-    CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_ALLBSD_SOURCE"
+    CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_ALLBSD_SOURCE -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
   elif test "x$OPENJDK_TARGET_OS" = xlinux; then
     CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
   fi

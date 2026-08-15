@@ -275,8 +275,6 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_OPTIMIZATION],
   # Generate make dependency files
   if test "x$TOOLCHAIN_TYPE" = xgcc || test "x$TOOLCHAIN_TYPE" = xclang; then
     C_FLAG_DEPS="-MMD -MF"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    C_FLAG_DEPS="-MMD -MF"
   elif test "x$TOOLCHAIN_TYPE" = xsolstudio; then
     C_FLAG_DEPS="-xMMD -xMF"
   elif test "x$TOOLCHAIN_TYPE" = xxlc; then
@@ -301,9 +299,6 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_OPTIMIZATION],
       CXXFLAGS_DEBUG_SYMBOLS="-g"
     fi
     ASFLAGS_DEBUG_SYMBOLS="-g"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    CFLAGS_DEBUG_SYMBOLS="-g"
-    CXXFLAGS_DEBUG_SYMBOLS="-g"
   elif test "x$TOOLCHAIN_TYPE" = xsolstudio; then
     CFLAGS_DEBUG_SYMBOLS="-g -xs"
     CXXFLAGS_DEBUG_SYMBOLS="-g0 -xs"
@@ -415,19 +410,6 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK],
     $2CXXFLAGS_JDK="${$2CXXFLAGS_JDK} ${$2CXXSTD_CXXFLAG}"
     $2JVM_CFLAGS="${$2JVM_CFLAGS} ${$2CXXSTD_CXXFLAG}"
     AC_SUBST($2CXXSTD_CXXFLAG)
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
-    LEGACY_EXTRA_CFLAGS="$LEGACY_EXTRA_CFLAGS -fstack-protector"
-    LEGACY_EXTRA_CXXFLAGS="$LEGACY_EXTRA_CXXFLAGS -fstack-protector"
-    if test "x$OPENJDK_TARGET_OS" != xmacosx; then
-      LDFLAGS_JDK="$LDFLAGS_JDK -Wl,-z,relro"
-      LEGACY_EXTRA_LDFLAGS="$LEGACY_EXTRA_LDFLAGS -Wl,-z,relro"
-    fi
-    $2CXXSTD_CXXFLAG="-std=gnu++98"
-    FLAGS_CXX_COMPILER_CHECK_ARGUMENTS([[$]$2CXXSTD_CXXFLAG -Werror],
-                                       [], [$2CXXSTD_CXXFLAG=""])
-    $2CXXFLAGS_JDK="${$2CXXFLAGS_JDK} ${$2CXXSTD_CXXFLAG}"
-    $2JVM_CFLAGS="${$2JVM_CFLAGS} ${$2CXXSTD_CXXFLAG}"
-    AC_SUBST($2CXXSTD_CXXFLAG)
   fi
 
   if test "x$CFLAGS" != "x${ADDED_CFLAGS}"; then
@@ -509,9 +491,7 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK],
         ;;
     esac
 
-    if test "x$TOOLCHAIN_TYPE" = xgcc; then
-      TOOLCHAIN_CHECK_COMPILER_VERSION(6, FLAGS_SETUP_GCC6_COMPILER_FLAGS)
-    fi
+    TOOLCHAIN_CHECK_COMPILER_VERSION(6, FLAGS_SETUP_GCC6_COMPILER_FLAGS)
 
     # Check that the compiler supports -Wformat-overflow flag
     # Set USE_FORMAT_OVERFLOW to 1 if it does.
@@ -671,7 +651,7 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK],
     # FIXME: PPC64 should not be here.
     CCXXFLAGS_JDK="$CCXXFLAGS_JDK -DPPC64"
   elif test "x$OPENJDK_TARGET_OS" = xbsd; then
-    CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_ALLBSD_SOURCE"
+    CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_ALLBSD_SOURCE -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
   elif test "x$OPENJDK_TARGET_OS" = xlinux; then
     CCXXFLAGS_JDK="$CCXXFLAGS_JDK -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
   fi
